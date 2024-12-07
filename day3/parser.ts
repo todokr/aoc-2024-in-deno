@@ -29,17 +29,20 @@ export const parse = (input: string): Op[] => {
   for (const match of matches) {
     const code = match[0].match(OpCodePattern)?.[1];
     switch (code) {
-      case "mul":
+      case "mul": {
         const left = parseInt(match[1]);
         const right = parseInt(match[2]);
         ops.push({ code: "mul", left, right });
         break;
-      case "do":
+      }
+      case "do": {
         ops.push({ code: "do" });
         break;
-      case "don't":
+      }
+      case "don't": {
         ops.push({ code: "dont" });
         break;
+      }
     }
   }
   return ops;
