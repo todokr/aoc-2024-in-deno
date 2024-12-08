@@ -2,13 +2,12 @@ export class Player {
   private frame: number = 0;
   constructor(
     private scene: Scene,
-    private fps: number,
-    private draw: boolean = true,
+    private fps?: number,
   ) {}
 
-  async play() {
-    console.log("\x1b[H\x1b[2J");
-    if (this.draw) {
+  async play(): Promise<SceneState> {
+    if (this.fps) {
+      console.log("\x1b[H\x1b[2J");
       console.log(`state: ${this.scene.state}`);
       console.log(`visited: ${this.scene.visited.length}`);
       this.scene.draw();
@@ -17,7 +16,11 @@ export class Player {
     this.frame++;
     if (this.scene.state === "ongoing") {
       this.scene.next();
-      await this.play();
+      return await this.play();
+    } else {
+      console.log(`state: ${this.scene.state}`);
+      console.log(`visited: ${this.scene.visited.length}`);
+      return Promise.resolve(this.scene.state);
     }
   }
 
@@ -30,22 +33,28 @@ export class Player {
 
 export class Scene {
   state: SceneState = "ongoing";
+  private map: Readonly<FieldMap>;
+  private guard: Readonly<Guard>;
   constructor(private _map: FieldMap, private _guard: Guard) {
-    _map[_guard.y][_guard.x].visited = _guard.direction;
+    this.map = structuredClone(_map);
+    this.map[_guard.y][_guard.x].visited = _guard.direction;
+    this.guard = _guard;
   }
-
-  get guard(): Readonly<Guard> {
-    return this._guard;
-  }
-
   get visited(): Cell[] {
-    return this._map.flat().filter((cell) => cell.visited);
+    return this.map.flat().filter((cell) => cell.visited);
+  }
+
+  setObstraction(x: number, y: number) {
+    this.map[y][x].obstraction = true;
+  }
+  get obstractions() {
+    return this.map.flat().filter(cell => cell.obstraction);
   }
 
   draw() {
-    for (const row of this._map) {
+    for (const row of this.map) {
       const pxcel = row.map((cell) => {
-        return this.cellView(cell, this._guard);
+        return this.cellView(cell, this.guard);
       });
       console.log(pxcel.join(""));
     }
@@ -63,38 +72,38 @@ export class Scene {
       this.move(front);
       // visit for the first time
       if (!front.visited) {
-        front.visited = this._guard.direction;
+        front.visited = this.guard.direction;
       } // second time, same direction means the abyss of time
-      else if (front.visited === this._guard.direction) {
+      else if (front.visited === this.guard.direction) {
         this.state = "abyss";
       }
     }
   }
 
   move(cell: Cell) {
-    this._guard = { ...this._guard, x: cell.x, y: cell.y };
+    this.guard = { ...this.guard, x: cell.x, y: cell.y };
   }
 
   turn() {
-    this._guard = { ...this._guard, direction: this.nextDirection };
+    this.guard = { ...this.guard, direction: this.nextDirection };
   }
 
   private get front(): Cell {
-    const { x, y, direction } = this._guard;
+    const { x, y, direction } = this.guard;
     switch (direction) {
       case "up":
-        return this._map[y - 1]?.[x];
+        return this.map[y - 1]?.[x];
       case "down":
-        return this._map[y + 1]?.[x];
+        return this.map[y + 1]?.[x];
       case "left":
-        return this._map[y][x - 1];
+        return this.map[y][x - 1];
       case "right":
-        return this._map[y][x + 1];
+        return this.map[y][x + 1];
     }
   }
 
   private get nextDirection() {
-    const { direction } = this._guard;
+    const { direction } = this.guard;
     switch (direction) {
       case "up":
         return "right";

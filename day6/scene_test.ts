@@ -69,11 +69,11 @@ Deno.test("draw", () => {
     { x: 1, y: 1 },
     { x: 3, y: 2 },
     { x: 2, y: 4 },
-    { x: 0, y: 3 },
   ];
   const width = 10;
   const height = 10;
   const scene = setup(width, height, obstractions, { x: 1, y: 3 });
+  scene.setObstraction(0, 3);
 
   const expected = [
     { x: 1, y: 3, direction: "up", state: "ongoing" },

@@ -23,7 +23,18 @@ const loadInput = (): { map: FieldMap; guard: Guard } => {
 };
 
 const { map, guard } = loadInput();
-const scene = new Scene(map, guard);
-const player = new Player(scene);
 
-player.play();
+const infinitLoop = [];
+const movable = map.flat().filter((cell) => !cell.obstraction);
+for(const {x, y} of movable) {
+  const scene = new Scene(map, guard);
+  scene.setObstraction(x, y);
+  console.log("obstraction", x, y, "==============================");
+  const player = new Player(scene);
+  const endState = await player.play();
+  if (endState === "abyss") {
+    infinitLoop.push({x, y});
+  }
+}
+
+console.log(infinitLoop.length);
