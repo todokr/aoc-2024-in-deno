@@ -1,0 +1,7 @@
+  /home/todokr/git-project/aoc-2024-in-deno/day7:
+  合計 20
+  drwxr-xr-x  2 todokr todokr 4096 12月  8 14:51 .
+  drwxr-xr-x 10 todokr todokr 4096 12月  8 14:51 ..
+  -rw-r--r--  1 todokr todokr  118 12月  8 14:51 deno.json
+  -rw-r--r--  1 todokr todokr  226 12月  8 14:51 part1.ts
+  -rw-r--r--  1 todokr todokr  143 12月  8 14:51 main_test.ts
