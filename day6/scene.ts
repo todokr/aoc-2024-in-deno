@@ -34,7 +34,7 @@ export class Player {
 export class Scene {
   state: SceneState = "ongoing";
   private map: Readonly<FieldMap>;
-  private guard: Readonly<Guard>;
+  guard: Readonly<Guard>;
   constructor(private _map: FieldMap, private _guard: Guard) {
     this.map = structuredClone(_map);
     this.map[_guard.y][_guard.x].visited = _guard.direction;
