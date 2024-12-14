@@ -1,11 +1,15 @@
 {
   "version": "4",
   "specifiers": {
+    "jsr:@es-toolkit/es-toolkit@^1.30.0": "1.30.0",
     "jsr:@std/assert@1": "1.0.9",
     "jsr:@std/collections@^1.0.9": "1.0.9",
     "jsr:@std/internal@^1.0.5": "1.0.5"
   },
   "jsr": {
+    "@es-toolkit/es-toolkit@1.30.0": {
+      "integrity": "863b150d532a63a7b7567fe371801efee6e9602b3387689d95bee690188cd501"
+    },
     "@std/assert@1.0.9": {
       "integrity": "a9f0c611a869cc791b26f523eec54c7e187aab7932c2c8e8bea0622d13680dcd",
       "dependencies": [
@@ -21,6 +25,7 @@
   },
   "workspace": {
     "dependencies": [
+      "jsr:@es-toolkit/es-toolkit@^1.30.0",
       "jsr:@std/assert@1",
       "jsr:@std/collections@^1.0.9"
     ]

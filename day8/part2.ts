@@ -1,8 +1,7 @@
 import {
   Antenna,
-  calcAntinodes,
+  calcInfAntinodes,
   calcPairs,
-  isWithin,
   Point,
 } from "./functions.ts";
 import { groupBy, uniqWith } from "@es-toolkit/es-toolkit";
@@ -12,7 +11,7 @@ const lines = input.split("\n").filter(Boolean);
 
 const height = lines.length;
 const width = lines[0].length;
-const within = isWithin(width, height);
+const searchAntinodeds = calcInfAntinodes(width, height);
 
 const antennas: Antenna[] = [];
 for (const [y, line] of lines.entries()) {
@@ -27,8 +26,7 @@ const anntenasByFreq = Object.entries(groupBy(antennas, (a) => a.freq));
 const antinodes = anntenasByFreq.reduce((acc, [freq, antennas]) => {
   const pairs = calcPairs(antennas);
   const antinodes = pairs
-    .flatMap(([p1, p2]) => calcAntinodes(p1, p2))
-    .filter(within);
+    .flatMap(([p1, p2]) => searchAntinodeds(p1, p2))
   acc.set(freq, antinodes);
   return acc;
 }, new Map<string, Point[]>());
