@@ -58,8 +58,7 @@ export const splitByBlank = <T extends Plant>(
 ): T[][] => {
   const result: T[][] = [];
   let current: T[] = [];
-  const compareAxis: 'x' | 'y' =
-    side === "top" || side === "bottom"
+  const compareAxis: "x" | "y" = side === "top" || side === "bottom"
     ? "x"
     : "y";
   const sorted = fences.toSorted((a, b) => a[compareAxis] - b[compareAxis]);
